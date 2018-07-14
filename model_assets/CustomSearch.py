@@ -7,9 +7,8 @@ import pandas as pd
 import pickle as pkl
 
 
-with open("./model_assets/features_df.pkl", "rb") as f:
-    dummied_df = pkl.load(f)
-
+dummied_df = pd.read_csv("./model_assets/features_df.csv", index_col='name')
+    
 with open("./model_assets/content.pkl", "rb") as f:
     content = pkl.load(f)
 
