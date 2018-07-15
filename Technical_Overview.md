@@ -32,7 +32,7 @@ This system was trained using game data requested from Giantbomb.com's api.  The
 ![alt text](figures/venn_TombRaider_Uncharted4.png "Two Similar Games")
 
 #### Two Different Games:
-![alt text](venn_StreetFighterV_RocketLeague.png "Two Different Games")
+![alt text](figures/venn_StreetFighterV_RocketLeague.png "Two Different Games")
 
 
 The cosine distance is calculated between every game and is saved in a pairwise table.  I then wrote a python class that interfaces with this table, allowing users to easily search one or more games at a time to get an interesting mix of results.  Finally, I wrote a web application which users can easily use.  
@@ -61,7 +61,12 @@ You can find the documentation for accessing Giant Bomb's API [here](https://www
 
 All I had to do to use the API was to get an API key.  Once I had that, I first scraped the `name` and `guid` fields for all Playstation games.  When requesting from the `games` endpoint, each response had up to 100 games, and most of the meta-data was not included. I iteratively saved each response to a file, `games_list.json`, which I would use to request each game's reviews and metadata individually. 
 
-There are a total of 2800 ps4 games, and just under 30,000 user_reviews in GB's database.  I ran into my first obstacle when I wanted to filter my search to games that had more than 5 user-reviews. Turns out that there was a bug in the API that returned 0 user_reviews for all games, so my filter returned 0 results. So with no way of knowing how many games would be useful, I requested all reviews for all games, only to discover that there were only about 100 users who had reviewed 5 or more games.  Realizing this was not enough to build a collaborative filter, I resorted to building a content filter using the game's metadata.  
+There are a total of 2800 ps4 games, and just under 30,000 user_reviews in GB's database.  I ran into my first obstacle when I wanted to filter my search to games that had more than 5 user-reviews. Turns out that there was a bug in the API that returned 0 user_reviews for all games, so my filter returned 0 results. So with no way of knowing how many games would be useful, I requested all reviews for all games, only to discover that there were only about 100 users who had reviewed 5 or more games.  
+
+![alt text](figures/userreviews.png "Not enough user reviews")
+
+
+Realizing this was not enough to build a collaborative filter, I resorted to building a content filter using the game's metadata.  
 
 I made one request for each of the 2800 games to get the metadata over a 14 hour period.  I iteratively saved each game's metadata a separate json file, identified by each game's unique `guid`.
 
@@ -107,7 +112,7 @@ After running all of the transformations, the final step was to compute a pairwi
 ![alt text](figures/venn_TombRaider_Uncharted4.png "Two Similar Games")
 
 #### Two Different Games have a distance of 0.92: 
-![alt text](venn_StreetFighterV_RocketLeague.png "Two Different Games")
+![alt text](figures/venn_StreetFighterV_RocketLeague.png "Two Different Games")
 
 After having done this, I decided that searching for 1 game wasn't good enough. I created a class that will take in a list of games, union their feature vector, transform the features into components, and then find the cosine distance to every other game.  The nice thing is that all you have to do is call `CustomSearch([game1, game2,...]).searchSimilarGames()`.
 
